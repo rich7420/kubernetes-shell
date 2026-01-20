@@ -28,14 +28,14 @@ K8S_VERSION="1.29.2-1.1"  # Kubernetes version
 
 echo -e "${GREEN}Starting Kubernetes Worker node setup...${NC}"
 
-# 1. Set hostname and update /etc/hosts
-echo "Configuring hostname and /etc/hosts..."
-hostnamectl set-hostname k8s-worker
+# 1. Get current hostname and update /etc/hosts
+echo "Configuring /etc/hosts..."
+CURRENT_HOSTNAME=$(hostname)
 WORKER_IP=$(hostname -I | awk '{print $1}')
-if ! grep -q "$WORKER_IP k8s-worker" /etc/hosts; then
-    echo "$WORKER_IP k8s-worker" >> /etc/hosts
+if ! grep -q "$WORKER_IP $CURRENT_HOSTNAME" /etc/hosts; then
+    echo "$WORKER_IP $CURRENT_HOSTNAME" >> /etc/hosts
 else
-    echo "k8s-worker entry already exists in /etc/hosts, skipping..."
+    echo "$CURRENT_HOSTNAME entry already exists in /etc/hosts, skipping..."
 fi
 
 # 2. Disable Swap

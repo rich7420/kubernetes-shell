@@ -44,13 +44,13 @@ else
     fi
 fi
 
-# 2. Set hostname and update /etc/hosts
-echo "Configuring hostname and /etc/hosts..."
-hostnamectl set-hostname k8s-master
-if ! grep -q "$MASTER_IP k8s-master" /etc/hosts; then
-    echo "$MASTER_IP k8s-master" >> /etc/hosts
+# 2. Get current hostname and update /etc/hosts
+echo "Configuring /etc/hosts..."
+CURRENT_HOSTNAME=$(hostname)
+if ! grep -q "$MASTER_IP $CURRENT_HOSTNAME" /etc/hosts; then
+    echo "$MASTER_IP $CURRENT_HOSTNAME" >> /etc/hosts
 else
-    echo "k8s-master entry already exists in /etc/hosts, skipping..."
+    echo "$CURRENT_HOSTNAME entry already exists in /etc/hosts, skipping..."
 fi
 
 # 3. Disable Swap
